@@ -21,7 +21,9 @@ const modalCloseBtn = document.querySelector('.modal-close-btn');
 const modalCaption = document.getElementById('modalCaption');
 
 const faesserProdukte = ["Guinness", "Kilkenny", "Cider", "Hop House", "Pils", "Apfelwein", "Landbier", "Büble Helles", "Staropramen"];
-const getraenkeProdukte = ["Cola", "Sprite", "Pepsi", "Pepsi Max", "Schwipp Schwapp"];
+const getraenkeProdukte = ["Cola", "Sprite","Wasser","Wasser 0,75 still","Wasser 0,75 sprudel","Wasser 0,25 still","Wasser 0,25 sprudel",
+     "Pepsi", "Pepsi Max", "Schwipp Schwapp", "Miranda", "7Up", "Eistee", "Weizen", "Weizen alk. fr.", "Heineken", "Salitos", "JeverFun",
+      "Oberdörfer", "Tonic Water", "Wild Berry", "Saft", "Energy"];
 let activeProductModalType = null; // 'faesser' oder 'getraenke'
 let activeProductModalSectionId = null; // z.B. 'section-2'
 let productModalData = { counts: {}, checkedStates: {} }; // Hält die Daten für das aktuell geöffnete Popup
