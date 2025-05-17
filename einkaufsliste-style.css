@@ -1,0 +1,213 @@
+/* css/einkaufsliste-style.css */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f8f9fa; /* Hellerer Hintergrund */
+}
+
+.einkaufsliste-header {
+    background-color: #007bff; /* Blauer Header */
+    color: white;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.einkaufsliste-header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+#chefModeBtn {
+    background-color: #ffc107; /* Gelber Chef-Button */
+    color: #212529;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+#chefModeBtn:hover {
+    background-color: #e0a800;
+}
+
+.einkaufsliste-container {
+    padding: 1em;
+}
+
+.add-item-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.add-item-section input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.quantity-controls button {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ced4da;
+    background-color: #e9ecef;
+    cursor: pointer;
+    font-size: 1.4em; /* Behalte oder passe die Schriftgröße an */
+
+    /* NEU: Flexbox für Zentrierung */
+    display: flex;
+    justify-content: center; /* Zentriert horizontal */
+    align-items: center;    /* Zentriert vertikal */
+
+    /* Optional: Verhindert, dass Text ausgewählt werden kann */
+    user-select: none; 
+    -webkit-user-select: none; /* für ältere Safari-Browser */
+    -moz-user-select: none;    /* für ältere Firefox-Browser */
+    -ms-user-select: none;     /* für IE/Edge */
+    color: #212529;
+}
+.quantity-controls span {
+    padding: 0 10px;
+    font-size: 1.1em;
+    min-width: 20px;
+    text-align: center;
+}
+
+#addItemBtn {
+    background-color: #28a745; /* Grüner Hinzufügen-Button */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#addItemBtn:hover {
+    background-color: #218838;
+}
+
+.shopping-list-section h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #495057;
+}
+
+#shoppingListItems, #completedListItems {
+    list-style: none;
+    padding: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#shoppingListItems li, #completedListItems li {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#shoppingListItems li:last-child, #completedListItems li:last-child {
+    border-bottom: none;
+}
+
+#shoppingListItems li.completed, #completedListItems li.completed {
+    background-color: #e9ecef;
+    color: #6c757d;
+    
+}
+#shoppingListItems li.completed .item-details,
+#completedListItems li.completed .item-details {
+    opacity: 0.7;
+}
+
+
+.item-checkbox {
+    transform: scale(1.3);
+    cursor: pointer;
+}
+.item-checkbox:disabled {
+    cursor: not-allowed;
+}
+
+.item-info {
+    flex-grow: 1;
+}
+.item-name {
+    font-weight: bold;
+}
+.item-details {
+    font-size: 0.85em;
+    color: #6c757d;
+}
+
+/* Passwort Modal spezifisches Styling */
+.password-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 350px; /* Schmaler für PIN-Eingabe */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.password-modal-content input[type="password"] {
+    width: calc(100% - 22px); /* Berücksichtigt Padding und Border */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1.2em;
+}
+.password-modal-content button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+.password-modal-content button:hover {
+    background-color: #0056b3;
+}
+
+.delete-item-btn {
+    background: none;
+    border: none;
+    color: #dc3545; /* Rote Farbe für Löschen */
+    font-size: 1.2em; /* Größe des Icons anpassen */
+    cursor: pointer;
+    padding: 0 5px; /* Etwas Abstand */
+    margin-left: auto; /* Schiebt den Button nach rechts, wenn Platz ist */
+}
+
+.delete-item-btn:hover {
+    color: #c82333; /* Dunkleres Rot beim Hovern */
+}
+
+/* Anpassung für das li-Element, um den Button gut zu positionieren */
+#shoppingListItems li, #completedListItems li {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    display: flex; /* Bleibt flex */
+    align-items: center;
+    gap: 10px;
+}

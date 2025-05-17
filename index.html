@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Checkliste</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <button id="backButton" style="display: none;">&leftarrow; Zurück</button>
+        <h1>Checklisten</h1>
+    </header>
+
+    <main id="appContainer">
+        <section id="dateSelection">
+            <h2>Datum auswählen:</h2>
+            <select id="dateSelector">
+                </select>
+            <button id="submitDate">Weiter</button>
+            <br> <a href="einkaufsliste.html" class="navigation-button" style="margin-top: 15px;">Zur Einkaufsliste</a> </section>
+        </section>
+
+        <section id="checklistTypeSelection" style="display: none;">
+            <h2>Checkliste auswählen:</h2>
+            <button data-type="bar">Bar Checkliste</button>
+            <button data-type="service">Service Checkliste</button>
+        </section>
+
+        <section id="checklistContainer" style="display: none;">
+            </section>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <span class="modal-close-btn">&times;</span>
+        <img class="modal-content" id="modalImageContent">
+    </div>
+
+    <div id="productModal" class="modal">
+    <div class="modal-content-wrapper product-modal-content"> <div class="modal-header">
+            <h3 id="productModalTitle">Produktliste</h3>
+            <span class="modal-close-btn product-modal-close-btn">&times;</span>
+        </div>
+        <div class="modal-body" id="productModalBody">
+            <div id="productPage1">
+                <div id="productItemsContainerPage1">
+                    </div>
+                <div class="modal-footer">
+                    <button id="productModalNextBtn" class="button-primary">Weiter</button>
+                </div>
+            </div>
+
+            <div id="productPage2" style="display: none;">
+                <ul id="productChecklistContainerPage2" class="product-checklist">
+                    </ul>
+                <div class="modal-footer">
+                    <button id="productModalBackBtn" class="button-secondary">Zurück</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    <script src="firebase-config.js"></script> 
+    <script src="app.js"></script>
+</body>
+</html>
