@@ -37,13 +37,20 @@ body {
 }
 
 .add-item-section {
-    display: flex;
-    gap: 10px;
+    display: flex; /* Hauptcontainer wird zum Flex-Container */
+    flex-direction: column; /* Elemente (Zeilen) untereinander anordnen */
+    gap: 10px; /* Abstand zwischen den Zeilen */
     margin-bottom: 20px;
     padding: 15px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.input-row {
+    display: flex; /* Die erste Zeile wird auch zum Flex-Container */
+    gap: 10px;     /* Abstand zwischen Produktname-Input und Mengensteuerung */
+    align-items: center; /* Vertikal zentrieren, falls Höhen unterschiedlich sind */
 }
 
 .add-item-section input[type="text"] {
@@ -58,6 +65,12 @@ body {
     align-items: center;
 }
 
+.button-row {
+    display: flex; /* Damit der Button darin zentriert oder anders ausgerichtet werden kann */
+    justify-content: flex-end; /* Schiebt den Button nach rechts */
+    /* Alternativ: justify-content: center; für Zentrierung */
+    /* Oder: justify-content: flex-start; für linksbündig */
+}
 
 
 .quantity-controls button {
@@ -87,18 +100,19 @@ body {
     text-align: center;
 }
 
-#addItemBtn {
-    background-color: #28a745; /* Grüner Hinzufügen-Button */
+#addItemBtn { /* Bestehendes Styling für den Button anpassen, falls nötig */
+    background-color: #28a745;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 25px; /* Eventuell etwas mehr Padding für einen größeren Button */
     border-radius: 4px;
     cursor: pointer;
+    font-size: 1em; /* Schriftgröße anpassen */
+    flex-grow: 1;
 }
 #addItemBtn:hover {
     background-color: #218838;
 }
-
 .shopping-list-section h2 {
     margin-top: 20px;
     margin-bottom: 10px;
