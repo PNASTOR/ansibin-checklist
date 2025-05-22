@@ -19,6 +19,7 @@ const imageModal = document.getElementById('imageModal');
 const modalImageContent = document.getElementById('modalImageContent');
 const modalCloseBtn = document.querySelector('.modal-close-btn');
 const modalCaption = document.getElementById('modalCaption');
+const kioskChecklistBtn = document.getElementById('kioskChecklistBtn');
 
 const faesserProdukte = ["Guinness", "Kilkenny", "Cider", "Hop House", "Pils", "Apfelwein", "Landbier", "Büble Helles", "Staropramen"];
 const getraenkeProdukte = ["Cola", "Sprite","Wasser","Wasser 0,75 still","Wasser 0,75 sprudel","Wasser 0,25 still","Wasser 0,25 sprudel",
@@ -60,7 +61,7 @@ function getWorkingDays() {
 
     // Sammle von diesem referenzTagFürListe rückwärts die letzten 3 Arbeitstage (Di-Sa)
     let anzahlGefundenerTage = 0;
-    for (let i = 0; anzahlGefundenerTage < 3 && i < 10; i++) { // i < 10 als Sicherheitslimit
+    for (let i = 0; anzahlGefundenerTage < 5 && i < 10; i++) { // i < 10 als Sicherheitslimit
         let potenziellerArbeitstag = new Date(referenzTagFürListe);
         potenziellerArbeitstag.setDate(referenzTagFürListe.getDate() - i);
 
@@ -124,12 +125,28 @@ function updateView() {
     checklistTypeSelectionSection.style.display = 'none';
     checklistContainer.style.display = 'none';
     backButton.style.display = 'none';
+    if (kioskChecklistBtn) kioskChecklistBtn.style.display = 'none'; // Standardmäßig ausblenden
 
     if (currentState === 'dateSelection') {
         dateSelectionSection.style.display = 'block';
+        // kioskChecklistBtn bleibt hier versteckt (oder explizit verstecken, falls es woanders sichtbar wurde)
     } else if (currentState === 'checklistTypeSelection') {
         checklistTypeSelectionSection.style.display = 'block';
         backButton.style.display = 'block';
+
+        // Sichtbarkeit des Kiosk-Buttons basierend auf dem ausgewählten Datum steuern
+        if (selectedDate && kioskChecklistBtn) { // selectedDate ist "YYYY-MM-DD"
+            const dateObj = new Date(selectedDate.replace(/-/g, '/')); // Konvertiere zu Date-Objekt
+            const dayOfWeek = dateObj.getDay(); // 0=Sonntag, 1=Montag, ..., 5=Freitag, 6=Samstag
+
+            if (dayOfWeek === 5 || dayOfWeek === 6) { // Nur an Freitagen (5) und Samstagen (6)
+                kioskChecklistBtn.style.display = 'inline-block'; // Oder 'block', je nach Layout
+            } else {
+                kioskChecklistBtn.style.display = 'none';
+            }
+        } else if (kioskChecklistBtn) {
+             kioskChecklistBtn.style.display = 'none'; // Falls kein Datum gewählt, ausblenden
+        }
     } else if (currentState === 'checklistView') {
         checklistContainer.style.display = 'block';
         backButton.style.display = 'block';
@@ -288,8 +305,37 @@ const serviceChecklistStructure = [
     { title: "Anmerkungen", notesField: true, maxLength: 150 }
 ];
 
+const kioskChecklistStructure = [
+    {
+        title: "Kiosk",
+        nameField: true,
+        items: [
+            "Auffüllen, des Getränkekühlschranks und Regale",
+            "Fegen und Wischen des Bodens",
+            "Leere Flaschen einsammeln und zur Bar bringen",
+            "Pfandflaschen ins Lager bringen und sortieren"
+        ],
+        allowImageUpload: true
+    },
+    { title: "Anmerkungen", notesField: true, maxLength: 150 }
+];
+
 function generateChecklistHTML(structure, data = {}) {
-    let html = `<h2>${selectedChecklistType === 'bar' ? 'Bar' : 'Service'} Checkliste für ${formatDate(new Date(selectedDate.replace(/-/g, '/')))}</h2>`; // Korrigiertes Datumsformat für Anzeige
+    let checklistTitelText = ''; // Variable für den dynamischen Teil des Titels
+
+    // Bestimme den Titeltext basierend auf selectedChecklistType
+    if (selectedChecklistType === 'bar') {
+        checklistTitelText = 'Bar';
+    } else if (selectedChecklistType === 'service') {
+        checklistTitelText = 'Service';
+    } else if (selectedChecklistType === 'kiosk') { // NEUE BEDINGUNG HINZUGEFÜGT
+        checklistTitelText = 'Kiosk';
+    } else {
+        checklistTitelText = 'Unbekannte'; // Fallback
+    }
+
+    // Setze den HTML-String mit dem korrekten Titel zusammen
+    let html = `<h2>${checklistTitelText} Checkliste für ${formatDate(new Date(selectedDate.replace(/-/g, '/')))}</h2>`;
     const isEditable = isChecklistEditable();
 
     structure.forEach((section, sectionIndex) => {
@@ -314,11 +360,11 @@ function generateChecklistHTML(structure, data = {}) {
             });
         }
 
-        if (section.productButton) { 
+        if (section.productButton) {
             html += `<div class="product-button-container" style="margin-top: 10px;">
                         <button class="product-action-btn" data-product-type="${section.productButton.toLowerCase()}" data-section-id="${sectionId}">
-                            ${section.productButton} ${isChecklistEditable() ? 'auffüllen' : 'anzeigen'}
-                        </button>
+                            ${section.productButton} ${isChecklistEditable() ? 'verwalten' : 'anzeigen'} 
+                        </button> {/* Du hattest hier 'auffüllen', ich habe es zu 'verwalten' geändert für Konsistenz, passe es bei Bedarf an */}
                      </div>`;
         }
 
@@ -338,7 +384,7 @@ function generateChecklistHTML(structure, data = {}) {
             html += `<div class="image-preview-container">`;
             for (const imageId in sectionImages) {
                 const imageUrl = sectionImages[imageId].url;
-                const imageName = sectionImages[imageId].name; // Name des Bildes in Storage
+                const imageName = sectionImages[imageId].name;
                 html += `<div class="image-preview-item" data-image-id="${imageId}" data-image-name="${imageName}">
                             <img src="${imageUrl}" alt="Vorschau" style="max-width: 100px; max-height: 100px; margin-right: 5px;">
                             ${isEditable ? `<button class="delete-image-btn">Löschen</button>` : ''}
@@ -349,12 +395,14 @@ function generateChecklistHTML(structure, data = {}) {
         }
 
         if (section.notesField) {
-            const notesValue = data.anmerkungen || '';
-            html += `<label for="anmerkungen">Anmerkungen (max. ${section.maxLength} Zeichen):</label>`;
-            html += `<textarea id="anmerkungen" data-field="anmerkungen" maxlength="${section.maxLength}" ${!isEditable ? 'disabled' : ''}>${notesValue}</textarea>`;
-            html += `<p id="charCountAnmerkungen">0 / ${section.maxLength}</p>`;
+            const notesValue = (data[sectionId] && data[sectionId].anmerkungen) || (data.anmerkungen || ''); // Prüft Anmerkungen in der Sektion oder global für ältere Strukturen
+            // Wenn Anmerkungen immer pro Sektion sind und deine `kioskChecklistStructure` Anmerkungen in einer eigenen Sektion hat:
+            // const notesValue = (data[sectionId] && data[sectionId].anmerkungen) || ''; // Wäre dann so
+            html += `<label for="${sectionId}-anmerkungen">Anmerkungen (max. ${section.maxLength} Zeichen):</label>`; // ID geändert zu sectionId-anmerkungen
+            html += `<textarea id="${sectionId}-anmerkungen" data-section-id="${sectionId}" data-field="anmerkungen" maxlength="${section.maxLength}" ${!isEditable ? 'disabled' : ''}>${notesValue}</textarea>`;
+            html += `<p id="charCount-${sectionId}-Anmerkungen">0 / ${section.maxLength}</p>`; // ID für Zeichenzähler angepasst
         }
-        html += `</div>`;
+        html += `</div>`; // Ende .checklist-section
     });
 
     html += `<div style="margin-top: 30px; margin-bottom: 20px; text-align: center;">
@@ -369,7 +417,24 @@ let currentDataRef = null; // Hält die Referenz zum aktuellen Firebase Pfad
 
 function loadChecklist() {
     checklistContainer.innerHTML = '<p>Lade Checkliste...</p>';
-    const structure = selectedChecklistType === 'bar' ? barChecklistStructure : serviceChecklistStructure;
+
+    let structure; // Variable für die zu ladende Checklistenstruktur
+    // selectedChecklistType wird gesetzt, wenn der Benutzer einen Button (Bar, Service, Kiosk) klickt
+
+    if (selectedChecklistType === 'bar') {
+        structure = barChecklistStructure;
+    } else if (selectedChecklistType === 'service') {
+        structure = serviceChecklistStructure;
+    } else if (selectedChecklistType === 'kiosk') { // NEUE BEDINGUNG HINZUGEFÜGT
+        structure = kioskChecklistStructure; // Hier die neue Struktur zuweisen
+    } else {
+        // Fallback oder Fehlerbehandlung, falls selectedChecklistType unbekannt ist
+        console.error("Unbekannter Checklisten-Typ in loadChecklist:", selectedChecklistType);
+        checklistContainer.innerHTML = '<p>Fehler: Unbekannter Checklisten-Typ.</p>';
+        return; // Beende die Funktion hier, da keine gültige Struktur geladen werden kann
+    }
+
+    // Der dbPath wird korrekt gebildet, da selectedChecklistType jetzt auch 'kiosk' sein kann
     const dbPath = `checklisten/${selectedDate}/${selectedChecklistType}`;
 
     if (currentDataRef) {
@@ -380,6 +445,7 @@ function loadChecklist() {
     currentDataRef.on('value', (snapshot) => {
         const data = snapshot.val() || {};
         currentChecklistData = data; // Lokalen Datenbestand aktualisieren
+        // generateChecklistHTML erhält jetzt die korrekte Struktur (bar, service oder kiosk)
         checklistContainer.innerHTML = generateChecklistHTML(structure, data);
         attachEventListenersToChecklist(); // Event Listener nach dem Rendern hinzufügen
         updateAnmerkungenCharCount(); // Zeichenzähler für Anmerkungen aktualisieren
