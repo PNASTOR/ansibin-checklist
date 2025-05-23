@@ -364,7 +364,7 @@ function generateChecklistHTML(structure, data = {}) {
             html += `<div class="product-button-container" style="margin-top: 10px;">
                         <button class="product-action-btn" data-product-type="${section.productButton.toLowerCase()}" data-section-id="${sectionId}">
                             ${section.productButton} ${isChecklistEditable() ? 'verwalten' : 'anzeigen'} 
-                        </button> {/* Du hattest hier 'auffüllen', ich habe es zu 'verwalten' geändert für Konsistenz, passe es bei Bedarf an */}
+                        </button> 
                      </div>`;
         }
 
