@@ -52,7 +52,7 @@ function getWorkingDays() {
     // Wenn es vor 07:00 Uhr am *aktuellen Kalendertag* ist,
     // soll die Checkliste für den *aktuellen Kalendertag* noch nicht im Dropdown erscheinen.
     // Der "aktuellste" Tag im Dropdown ist dann der vorherige Arbeitstag.
-    if (now.getHours() < 7) {
+    if (now.getHours() < 16) {
         referenzTagFürListe.setDate(now.getDate() - 1);
     }
 
@@ -886,7 +886,7 @@ function isChecklistEditable() {
     // Beispiel: Ist es 06:00 Uhr morgens, gehört man noch zum Arbeitstag des Vortages.
     // Ist es 07:00 Uhr oder später, gehört man zum Arbeitstag des aktuellen Kalendertages.
     let aktivesArbeitstagDatum = new Date(now);
-    if (now.getHours() < 7) {
+    if (now.getHours() < 16) {
         // Vor 07:00 Uhr morgens: Wir sind im Bearbeitungszeitraum des *vorherigen* Kalendertages.
         aktivesArbeitstagDatum.setDate(now.getDate() - 1);
     }
@@ -906,12 +906,12 @@ function isChecklistEditable() {
 
         // Start des Bearbeitungsfensters: 07:00 Uhr am Kalendertag der Checkliste
         const fensterStart = new Date(checklistKalenderDatum);
-        fensterStart.setHours(7, 0, 0, 0); // z.B. 17.05.2025, 07:00:00
+        fensterStart.setHours(16, 0, 0, 0); // z.B. 17.05.2025, 07:00:00
 
         // Ende des Bearbeitungsfensters: 07:00 Uhr am *Folgetag* des Kalendertages der Checkliste
         const fensterEnde = new Date(checklistKalenderDatum);
         fensterEnde.setDate(checklistKalenderDatum.getDate() + 1); // z.B. auf den 18.05.2025 setzen
-        fensterEnde.setHours(7, 0, 0, 0); // z.B. 18.05.2025, 07:00:00
+        fensterEnde.setHours(16, 0, 0, 0); // z.B. 18.05.2025, 07:00:00
 
         // Ist der aktuelle Zeitpunkt 'now' innerhalb dieses 24-Stunden-Fensters?
         return now >= fensterStart && now < fensterEnde;
